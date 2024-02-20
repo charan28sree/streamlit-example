@@ -12,29 +12,31 @@ forums](https://discuss.streamlit.io).
 
 In the meantime, below is an example of what you can do with just a few lines of code:
 """
+def main():
+    st.title("CSV File Uploader and Filters")
 
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
+    # File uploader
+    uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
 
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
+    if uploaded_file:
+        # Read CSV data into a DataFrame
+        df = pd.read_csv(uploaded_file)
 
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
+        # Display column names
+        st.write("Column Names:")
+        st.write(df.columns.tolist())
 
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
+        # Display distinct row values for each column
+        st.write("Distinct Row Values:")
+        for col in df.columns:
+            st.write(f"{col}: {df[col].unique().tolist()}")
 
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
+        # Add filters (you can customize this part)
+        selected_columns = st.multiselect("Select columns to display", df.columns)
+        filtered_df = df[selected_columns]
+
+        # Display filtered DataFrame
+        st.dataframe(filtered_df)
+
+if __name__ == "__main__":
+    main()

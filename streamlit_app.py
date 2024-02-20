@@ -21,22 +21,21 @@ def main():
     if uploaded_file:
         # Read CSV data into a DataFrame
         df = pd.read_csv(uploaded_file)
-
-'''        # Display column names
+'''
+        # Display column names
         st.write("Column Names:")
         st.write(df.columns.tolist())
 
         # Display distinct row values for each column
         st.write("Distinct Row Values:")
         for col in df.columns:
-            st.write(f"{col}: {df[col].unique().tolist()}")
-'''
+            st.write(f"{col}: {df[col].unique().tolist()}")'''
         # Add filters (you can customize this part)
-        selected_columns = st.multiselect("Select columns to display", df.columns)
-        filtered_df = df[selected_columns]
+selected_columns = st.multiselect("Select columns to display", df.columns)
+filtered_df = df[selected_columns]
 
         # Display filtered DataFrame
-        st.dataframe(filtered_df)
+st.dataframe(filtered_df)
 
 if __name__ == "__main__":
     main()

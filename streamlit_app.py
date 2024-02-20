@@ -21,9 +21,6 @@ if uploaded_file:
     selected_columns = st.multiselect("Select columns", df.columns)
     filtered_df = df[selected_columns]
 
-    min_row, max_row = st.slider("Select row range", 0, len(df), (0, len(df)))
-    filtered_df = filtered_df.iloc[min_row:max_row]
-
         # Step 3: Add a new "Reporting Period" column
     reporting_periods = filtered_df["Reporting Period"].unique()
     selected_reporting_period = st.selectbox("Select a reporting period", reporting_periods)

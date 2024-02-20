@@ -1,8 +1,7 @@
-import altair as alt
-import numpy as np
-import pandas as pd
 import streamlit as st
-
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 """
 # Welcome to Streamlit!
 
@@ -12,30 +11,27 @@ forums](https://discuss.streamlit.io).
 
 In the meantime, below is an example of what you can do with just a few lines of code:
 """
-def main():
-    st.title("CSV File Uploader and Filters")
 
-    # File uploader
-    uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
+# Step 1: Uploading a CSV file
+uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
-    if uploaded_file:
-        # Read CSV data into a DataFrame
-        df = pd.read_csv(uploaded_file)
-'''
-        # Display column names
-        st.write("Column Names:")
-        st.write(df.columns.tolist())
+if uploaded_file is not None:
+    dataframe = pd.read_csv(uploaded_file)
 
-        # Display distinct row values for each column
-        st.write("Distinct Row Values:")
-        for col in df.columns:
-            st.write(f"{col}: {df[col].unique().tolist()}")'''
-        # Add filters (you can customize this part)
-selected_columns = st.multiselect("Select columns to display", df.columns)
-filtered_df = df[selected_columns]
+    # Step 2: Representing the CSV file in a dataframe with column and row filter
+    st.dataframe(dataframe)
+    st.column_config.NumberColumn("Dollar values", format="$ %d")
+    # You can configure other column types as well
 
-        # Display filtered DataFrame
-st.dataframe(filtered_df)
+    # Step 3: Creating a bar graph using the selected dataframe value
+    selected_column = "Your_Column_Name"  # Replace with your actual column name
+    val_count = dataframe[selected_column].value_counts()
 
-if __name__ == "__main__":
-    main()
+    fig = plt.figure(figsize=(10, 5))
+    sns.barplot(val_count.index, val_count.values, alpha=0.8)
+    plt.title("Bar Chart for " + selected_column)
+    plt.ylabel("Count")
+    plt.xlabel("Categories")
+
+    # Display the figure in Streamlit
+    st.pyplot(fig)

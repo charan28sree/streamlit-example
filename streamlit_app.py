@@ -24,5 +24,9 @@ if uploaded_file:
     min_row, max_row = st.slider("Select row range", 0, len(df), (0, len(df)))
     filtered_df = filtered_df.iloc[min_row:max_row]
 
-    # Step 3: Create a bar chart
+        # Step 3: Add a new "Reporting Period" column
+    reporting_periods = filtered_df["Reporting Period"].unique()
+    selected_reporting_period = st.selectbox("Select a reporting period", reporting_periods)
+
+    # Step 4: Create a bar chart
     st.bar_chart(filtered_df)
